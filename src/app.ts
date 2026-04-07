@@ -3,7 +3,7 @@ import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import YAML from 'yaml';
-import swaggerUi from 'swagger-ui-express';
+import { apiReference } from '@scalar/express-api-reference';
 import { routes } from './routes';
 import { logger } from './middleware/logger';
 
@@ -26,7 +26,10 @@ const specFilePath = openapiPaths.find((p) => fs.existsSync(p));
 if (specFilePath) {
   const file = fs.readFileSync(specFilePath, 'utf8');
   spec = YAML.parse(file);
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(spec));
+  app.get('/openapi.json', (_request: Request, response: Response) => {
+    response.json(spec);
+  });
+  app.use('/api-docs', apiReference({ spec: { url: '/openapi.json' } }));
 } else {
   console.warn('openapi.yaml not found; API docs route disabled');
 }

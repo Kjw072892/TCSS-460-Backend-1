@@ -5,4 +5,7 @@ module.exports = {
   roots: ['<rootDir>/tests'],
   testMatch: ['**/*.test.ts'],
   moduleFileExtensions: ['ts', 'js', 'json'],
+  moduleNameMapper: {
+    '^@scalar/express-api-reference$': '<rootDir>/tests/__mocks__/scalarMock.cjs',
+  },
 };

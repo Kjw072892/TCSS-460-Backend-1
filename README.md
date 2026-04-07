@@ -121,7 +121,7 @@ OpenWeatherMap proxy. The API key lives in `.env` on the server — the client n
 
 **public / protected** — Proxy routes live under `protected/`. In Week 5, a single line of JWT middleware at the router level will protect all proxy routes.
 
-**Hand-written OpenAPI spec** — `openapi.yaml` is written manually so students learn the format directly. Auto-generation tools are introduced later in the group project.
+**Hand-written OpenAPI spec** — `openapi.yaml` is written manually so students learn the format directly. The spec is served with **Scalar** (an actively maintained Express middleware) at `/api-docs`. Auto-generation tools are introduced later in the group project.
 
 ## Testing
 
@@ -140,12 +140,12 @@ GitHub Actions runs lint + tests on every PR to `main`. See `.github/workflows/c
 
 ## Tech Stack
 
-| Tool               | Version |
-| ------------------ | ------- |
-| Express            | 5.2     |
-| TypeScript         | 5.9     |
-| Node.js            | 22 LTS  |
-| Jest + ts-jest     | 29      |
-| Supertest          | 7.2     |
-| swagger-ui-express | 5.0     |
-| tsx                | 4.21    |
+| Tool                          | Version |
+| ----------------------------- | ------- |
+| Express                       | 5.2     |
+| TypeScript                    | 5.9     |
+| Node.js                       | 22 LTS  |
+| Jest + ts-jest                | 29      |
+| Supertest                     | 7.2     |
+| @scalar/express-api-reference | 0.9     |
+| tsx                           | 4.21    |
