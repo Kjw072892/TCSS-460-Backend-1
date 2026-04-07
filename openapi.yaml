@@ -228,6 +228,134 @@ paths:
               schema:
                 $ref: '#/components/schemas/HeadersResponse'
 
+  /v1/greeting/users:
+    post:
+      tags: [Greeting (v1)]
+      summary: Greets user
+      description: Greets the user whose name is passed in the JSON body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Charles Bryan
+      responses:
+        '200':
+          description: Greeting response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Hello Donald Duck!
+
+  /v1/math/add?q=5%2B2:
+    get:
+      tags: [Adding (v1)]
+      summary: Adds two numbers
+      description: Adds the two numbers between the unicode %2B.
+      requestBody:
+        responses:
+          '200':
+            description: Adds two numbers
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    expression:
+                      type: string
+                      example: 7+3
+                    results:
+                      type: string
+                      example: 10
+
+  /v1/login/verify:
+    post:
+      tags: [Login (v1)]
+      summary: Logs user in
+      description: Logs the user in and greets the user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: Admin
+                password:
+                  type: string
+                  example: P@55w0rd!
+      responses:
+        '200':
+          description: Validates users login information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Admin; Welcome!
+        '401':
+          description: Invalid login data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Username and or password did not match. Please try again.
+
+  /v1/login/newuser:
+    post:
+      tags: [Login (v1)]
+      summary: Creates a new user account.
+      description: Creates a new user login information given username and password in body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: Kjw0728
+                password:
+                  type: string
+                  example: P@55w0rd!
+      responses:
+        '200':
+          description: Validates users login information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Kjw0728 has been created!
+        '401':
+          description: Invalid login data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Username and Password field must be filled.
+
   /v2/input/search:
     get:
       tags: [Input (v2)]
