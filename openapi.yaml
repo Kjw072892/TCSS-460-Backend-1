@@ -344,7 +344,7 @@ paths:
                   message:
                     type: string
                     example: Kjw0728 has been created!
-        '401':
+        '400':
           description: Invalid login data.
           content:
             application/json:
