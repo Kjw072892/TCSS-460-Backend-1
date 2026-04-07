@@ -260,21 +260,20 @@ paths:
       tags: [Adding (v1)]
       summary: Adds two numbers
       description: Adds the two numbers between the unicode %2B.
-      requestBody:
-        responses:
-          '200':
-            description: Adds two numbers
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    expression:
-                      type: string
-                      example: 7+3
-                    results:
-                      type: string
-                      example: 10
+      responses:
+        '200':
+          description: Adds two numbers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  expression:
+                    type: string
+                    example: 7+3
+                  results:
+                    type: string
+                    example: 10
 
   /v1/login/verify:
     post:
