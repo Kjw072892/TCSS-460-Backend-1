@@ -1,0 +1,256 @@
+openapi: 3.0.3
+info:
+  title: TCSS 460 Backend 1 API
+  version: 1.0.0
+  description: Express and TypeScript example API for routing, input handling, middleware, and proxy routes.
+servers:
+  - url: http://localhost:3000
+paths:
+  /:
+    get:
+      summary: Root health message
+      responses:
+        '200':
+          description: Greeting response
+  /v1/hello:
+    get:
+      summary: Basic GET hello route
+      responses:
+        '200':
+          description: Hello response
+    post:
+      summary: Basic POST hello route
+      responses:
+        '200':
+          description: Hello response
+    put:
+      summary: Basic PUT hello route
+      responses:
+        '200':
+          description: Hello response
+    patch:
+      summary: Basic PATCH hello route
+      responses:
+        '200':
+          description: Hello response
+    delete:
+      summary: Basic DELETE hello route
+      responses:
+        '200':
+          description: Hello response
+  /v1/input/search:
+    get:
+      summary: Echo query-string input
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Query input response
+  /v1/input/users/{id}:
+    get:
+      summary: Echo route parameter input
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User lookup response
+  /v1/input/users:
+    post:
+      summary: Echo JSON body input
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: Created user response
+  /v1/input/headers:
+    get:
+      summary: Echo request headers
+      responses:
+        '200':
+          description: Headers response
+  /v2/hello:
+    get:
+      summary: GET hello route with logging middleware
+      responses:
+        '200':
+          description: Hello response
+    post:
+      summary: POST hello route with logging middleware
+      responses:
+        '200':
+          description: Hello response
+    put:
+      summary: PUT hello route with logging middleware
+      responses:
+        '200':
+          description: Hello response
+    patch:
+      summary: PATCH hello route with logging middleware
+      responses:
+        '200':
+          description: Hello response
+    delete:
+      summary: DELETE hello route with logging middleware
+      responses:
+        '200':
+          description: Hello response
+  /v2/input/search:
+    get:
+      summary: Validated query-string input
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Query input response
+        '400':
+          description: Missing query parameter
+  /v2/input/users/{id}:
+    get:
+      summary: Validated route parameter input
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: User lookup response
+        '400':
+          description: Invalid user id
+  /v2/input/users:
+    post:
+      summary: Validated JSON body input
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '200':
+          description: Created user response
+        '400':
+          description: Validation failed
+  /v2/input/headers:
+    get:
+      summary: Echo request headers
+      responses:
+        '200':
+          description: Headers response
+  /proxy/weather:
+    get:
+      summary: Get raw current weather by city query
+      parameters:
+        - $ref: '#/components/parameters/CityQuery'
+      responses:
+        '200':
+          description: OpenWeatherMap current weather response
+        '400':
+          description: Missing city
+        '500':
+          description: Missing WEATHER_API_KEY
+        '502':
+          description: Failed to reach weather service
+  /proxy/weather/{city}:
+    get:
+      summary: Get raw current weather by city path parameter
+      parameters:
+        - $ref: '#/components/parameters/CityPath'
+      responses:
+        '200':
+          description: OpenWeatherMap current weather response
+        '500':
+          description: Missing WEATHER_API_KEY
+        '502':
+          description: Failed to reach weather service
+  /proxy/summary:
+    get:
+      summary: Get simplified weather summary by city query
+      parameters:
+        - $ref: '#/components/parameters/CityQuery'
+      responses:
+        '200':
+          description: Weather summary response
+        '400':
+          description: Missing city
+        '500':
+          description: Missing WEATHER_API_KEY
+        '502':
+          description: Failed to reach weather service
+  /proxy/summary/{city}:
+    get:
+      summary: Get simplified weather summary by city path parameter
+      parameters:
+        - $ref: '#/components/parameters/CityPath'
+      responses:
+        '200':
+          description: Weather summary response
+        '500':
+          description: Missing WEATHER_API_KEY
+        '502':
+          description: Failed to reach weather service
+  /proxy/forecast:
+    get:
+      summary: Get raw five-day forecast by city query
+      parameters:
+        - $ref: '#/components/parameters/CityQuery'
+      responses:
+        '200':
+          description: OpenWeatherMap forecast response
+        '400':
+          description: Missing city
+        '500':
+          description: Missing WEATHER_API_KEY
+        '502':
+          description: Failed to reach weather service
+components:
+  parameters:
+    CityQuery:
+      name: city
+      in: query
+      required: true
+      schema:
+        type: string
+      example: Seattle
+    CityPath:
+      name: city
+      in: path
+      required: true
+      schema:
+        type: string
+      example: Seattle
+  schemas:
+    UserInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Ada Lovelace
+        email:
+          type: string
+          format: email
+          example: ada@example.com
+      required:
+        - name
+        - email
