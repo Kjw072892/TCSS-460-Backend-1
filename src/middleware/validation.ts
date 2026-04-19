@@ -27,6 +27,32 @@ export const requireCity = (request: Request, response: Response, next: NextFunc
 };
 
 /**
+ * Validates that 'state' is present as either a query param or route param.
+ */
+export const requireStateCode = (request: Request, response:Response, next: NextFunction) => {
+  const state = request.query.state || request.params.state;
+  if(!state) {
+    response.status(400).json({error: 'State is required (query param or route param)'});
+    return;
+  }
+  next();
+};
+
+/**
+ * Validates that 'country' is present as either a query param or route param.
+ */
+export const requireCountryCode = (request:Request, response:Response, next: NextFunction) => {
+  const country = request.query.country || request.params.country;
+
+  if(!country) {
+    response.status(400).json({error:'Country code is require (query param or route param)'});
+    return;
+  };
+
+  next();
+}
+
+/**
  * Validates that 'city' is present as a query param.
  */
 export const requireCityQuery = (request: Request, response: Response, next: NextFunction) => {

@@ -1,6 +1,8 @@
 import { Router } from 'express';
-import { getWeather, getWeatherSummary, getForecast } from '../../controllers/proxy';
-import { requireEnvVar, requireCity, requireCityQuery } from '../../middleware/validation';
+import { getWeather, getWeatherSummary, getForecast} from '../../controllers/proxy';
+import { getGeoCoding } from '../../controllers/geocoding';
+import {getTransformedFiveDay} from '../../controllers/fiveDayForecast';
+import { requireEnvVar, requireCity, requireCityQuery, requireStateCode, requireCountryCode } from '../../middleware/validation';
 
 const proxyRouter = Router();
 
@@ -11,9 +13,14 @@ proxyRouter.use(requireEnvVar('WEATHER_API_KEY'));
 proxyRouter.get('/weather', requireCity, getWeather);
 proxyRouter.get('/weather/:city', requireCity, getWeather);
 proxyRouter.get('/forecast', requireCityQuery, getForecast);
+proxyRouter.get('/geocoding', requireCity, requireStateCode, requireCountryCode, getGeoCoding);
 
 // Transformed response — curates the raw data into a simplified shape
+
+proxyRouter.get('/summary/fiveday', requireCity, requireStateCode, requireCountryCode, getTransformedFiveDay);
+
 proxyRouter.get('/summary', requireCity, getWeatherSummary);
 proxyRouter.get('/summary/:city', requireCity, getWeatherSummary);
+
 
 export { proxyRouter };

@@ -224,6 +224,48 @@ paths:
           description: Missing WEATHER_API_KEY
         '502':
           description: Failed to reach weather service
+  /proxy/geocoding:
+    get:
+      summary: Get raw geocoding results by city, state, and country
+      parameters:
+        - $ref: '#/components/parameters/CityQuery'
+        - $ref: '#/components/parameters/StateQuery'
+        - $ref: '#/components/parameters/CountryQuery'
+      responses:
+        '200':
+          description: OpenWeatherMap geocoding response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GeocodingResult'
+        '400':
+          description: Missing city, state, or country
+        '500':
+          description: Missing WEATHER_API_KEY
+        '502':
+          description: Failed to reach geocoding service
+  /proxy/summary/fiveday:
+    get:
+      summary: Get simplified five-day forecast summary by city, state, and country
+      parameters:
+        - $ref: '#/components/parameters/CityQuery'
+        - $ref: '#/components/parameters/StateQuery'
+        - $ref: '#/components/parameters/CountryQuery'
+      responses:
+        '200':
+          description: Five daily forecast summaries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiveDayForecastSummary'
+        '400':
+          description: Missing city, state, or country
+        '500':
+          description: Missing WEATHER_API_KEY or upstream forecast error
+        '502':
+          description: Failed to reach weather service
 components:
   parameters:
     CityQuery:
@@ -233,6 +275,22 @@ components:
       schema:
         type: string
       example: Seattle
+    StateQuery:
+      name: state
+      in: query
+      required: true
+      schema:
+        type: string
+      description: State code for locations in the United States.
+      example: WA
+    CountryQuery:
+      name: country
+      in: query
+      required: true
+      schema:
+        type: string
+      description: ISO 3166 country code.
+      example: US
     CityPath:
       name: city
       in: path
@@ -254,3 +312,71 @@ components:
       required:
         - name
         - email
+    GeocodingResult:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Tacoma
+        lat:
+          type: number
+          example: 47.2455
+        lon:
+          type: number
+          example: -122.4383
+        country:
+          type: string
+          example: US
+        state:
+          type: string
+          example: Washington
+    FiveDayForecastSummary:
+      type: object
+      properties:
+        city:
+          type: string
+          example: Tacoma
+        country:
+          type: string
+          example: US
+        units:
+          type: string
+          example: fahrenheit
+        days:
+          type: integer
+          example: 5
+        forecast:
+          type: array
+          items:
+            $ref: '#/components/schemas/DailyForecastSummary'
+    DailyForecastSummary:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: 2026-04-19
+        temperature:
+          type: object
+          properties:
+            temp:
+              type: number
+              example: 66
+            feelsLike:
+              type: number
+              example: 65
+            low:
+              type: number
+              example: 57
+            high:
+              type: number
+              example: 70
+        conditions:
+          type: string
+          example: broken clouds
+        humidity:
+          type: number
+          example: 70
+        windSpeed:
+          type: number
+          example: 4.5
